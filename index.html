@@ -11,7 +11,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
             position: relative;
-            background-image: url('your-image.jpg'); /* Replace with actual image filename */
+            background-image: url('baby.jpg'); /* Replace with actual image filename */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -38,46 +38,61 @@
         h2 {
             color: #ff6699;
         }
+        .name-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: sparkFadeIn 3s ease-in-out forwards;
+        }
         .name {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             color: #ff3366;
-            margin-top: 20px;
-            animation: fadeIn 2s ease-in-out;
+            text-shadow: 0 0 5px #ffcc00;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .balloon, .teddy {
+            font-size: 40px;
+            animation: floatUp 3s infinite ease-in-out;
         }
-        .falling-element {
-            position: absolute;
-            font-size: 30px;
-            animation: fall 5s linear infinite;
+        @keyframes sparkFadeIn {
+            0% { opacity: 0; transform: scale(0.5); text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff6699; }
+            50% { opacity: 0.5; transform: scale(1.5); text-shadow: 0 0 30px #ffcc00, 0 0 50px #ff6699, 0 0 70px #ff3366; }
+            100% { opacity: 1; transform: scale(1); text-shadow: 0 0 50px #ffcc00, 0 0 80px #ff6699, 0 0 100px #ff3366; }
         }
-        .falling-paper {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: rgba(255, 0, 0, 0.7);
-            border-radius: 50%;
-            animation: fall 6s linear infinite;
+        @keyframes floatUp {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
         }
         @keyframes fall {
-            0% { transform: translateY(-100px); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
+            from { transform: translateY(-50px); opacity: 1; }
+            to { transform: translateY(100vh); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="card" onclick="revealName()">
+    <div class="card" id="card">
         <h2>We have a joyful announcement!</h2>
         <p>Click to reveal the name of our little princess 💖</p>
-        <p id="babyName" class="name hidden">Aayra</p>
+        <div id="nameContainer" class="name-container hidden">
+            <span class="teddy">🧸</span>
+            <span class="balloon">🎈</span>
+            <p class="name">Aayra</p>
+            <span class="balloon">🎈</span>
+            <span class="teddy">🧸</span>
+        </div>
     </div>
     
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("card").addEventListener("click", revealName);
+        });
+        
         function revealName() {
-            document.getElementById('babyName').classList.remove('hidden');
+            document.getElementById('nameContainer').classList.remove('hidden');
             setInterval(launchCelebration, 500);
             setInterval(launchColorfulPaper, 200);
         }
@@ -87,6 +102,10 @@
             element.className = 'falling-element';
             element.textContent = elements[Math.floor(Math.random() * elements.length)];
             element.style.left = Math.random() * window.innerWidth + 'px';
+            element.style.position = 'absolute';
+            element.style.top = '-50px';
+            element.style.fontSize = '24px';
+            element.style.animation = `fall ${3 + Math.random() * 2}s linear infinite`;
             document.body.appendChild(element);
             setTimeout(() => element.remove(), 5000);
         }
@@ -95,7 +114,11 @@
             let paper = document.createElement('div');
             paper.className = 'falling-paper';
             paper.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            paper.style.width = paper.style.height = Math.random() * 15 + 5 + 'px';
             paper.style.left = Math.random() * window.innerWidth + 'px';
+            paper.style.position = 'absolute';
+            paper.style.top = '-50px';
+            paper.style.animation = `fall ${3 + Math.random() * 2}s linear infinite`;
             document.body.appendChild(paper);
             setTimeout(() => paper.remove(), 6000);
         }
